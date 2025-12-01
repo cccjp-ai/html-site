@@ -6,469 +6,63 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: radial-gradient(circle at 20% 20%, #0e2230 0%, #071118 40%, #050b10 100%);
-      --accent: #0bd3a6;
-      --accent-2: #ffb757;
-      --panel: rgba(255, 255, 255, 0.05);
-      --panel-strong: rgba(255, 255, 255, 0.08);
-      --text: #eaf4ff;
-      --muted: #9fb2c7;
-      --border: rgba(255, 255, 255, 0.12);
-      --glow: 0 10px 40px rgba(11, 211, 166, 0.2);
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: "Space Grotesk", system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      display: flex;
-      justify-content: center;
-      padding: 32px 18px 48px;
-    }
-    .app {
-      width: min(1180px, 100%);
-      display: grid;
-      gap: 18px;
-    }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-    }
-    header h1 {
-      margin: 0;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-    }
-    header p {
-      margin: 4px 0 0;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-    .cards {
-      display: grid;
-      gap: 14px;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    }
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 16px 18px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.18);
-    }
-    .card h3 {
-      margin: 0 0 10px;
-      font-weight: 600;
-      font-size: 1.05rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      letter-spacing: 0.01em;
-    }
-    .tag {
-      padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      color: var(--accent);
-      font-weight: 600;
-      background: rgba(11, 211, 166, 0.08);
-      font-size: 0.8rem;
-    }
-    .circle-wrap {
-      background: var(--panel-strong);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 18px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-    }
-    .circle {
-      position: relative;
-      width: min(540px, 100%);
-      aspect-ratio: 1;
-      margin: 0 auto;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background: radial-gradient(circle, rgba(255,255,255,0.02), rgba(255,255,255,0));
-    }
-    .ring {
-      position: absolute;
-      inset: 6%;
-      border-radius: 50%;
-      border: 1px dashed rgba(255,255,255,0.12);
-    }
-    .key-node {
-      position: absolute;
-      width: 86px;
-      height: 86px;
-      border-radius: 18px;
-      border: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.06);
-      color: var(--text);
-      display: grid;
-      place-items: center;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      transition: transform 220ms ease, background 160ms ease, border 160ms ease, color 160ms ease;
-      cursor: pointer;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    }
-    .key-node:hover {
-      background: rgba(255, 255, 255, 0.1);
-      transform: translate(-50%, -50%) scale(1.04);
-    }
-    .key-node.active {
-      background: rgba(11, 211, 166, 0.18);
-      border-color: rgba(11, 211, 166, 0.8);
-      color: #0ef3c0;
-      box-shadow: var(--glow);
-    }
-    .key-node .label {
-      font-size: 1.4rem;
-    }
-    .key-node .sub {
-      color: var(--muted);
-      font-size: 0.8rem;
-      margin-top: -4px;
-    }
-    .info-grid {
-      display: grid;
-      gap: 10px;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    }
-    .row {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      padding: 6px 0;
-      border-bottom: 1px dashed rgba(255,255,255,0.08);
-      font-family: "IBM Plex Mono", monospace;
-      letter-spacing: 0.01em;
-      align-items: baseline;
-    }
-    .row:last-child { border-bottom: none; }
-    .degree { color: var(--muted); font-size: 0.95rem; }
-    .chord { font-weight: 600; }
-    .role { color: var(--accent-2); font-size: 0.88rem; }
-    .controls {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--border);
-    }
-    select, button.clean {
-      background: rgba(255, 255, 255, 0.07);
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      cursor: pointer;
-    }
-    button.clean {
-      background: var(--accent);
-      color: #04211c;
-      border: none;
-      box-shadow: var(--glow);
-      transition: transform 160ms ease, box-shadow 160ms ease;
-    }
-    button.clean:hover { transform: translateY(-1px); box-shadow: 0 16px 36px rgba(11, 211, 166, 0.35); }
-    .progressions {
-      display: grid;
-      gap: 8px;
-    }
-    .progression {
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .prog-title { font-weight: 600; letter-spacing: 0.01em; }
-    .prog-steps {
-      font-family: "IBM Plex Mono", monospace;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      color: var(--accent);
-    }
-    .muted { color: var(--muted); }
-    .inline-k {
-      padding: 3px 7px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
-      font-weight: 600;
-      letter-spacing: 0.02em;
-    }
-    @media (max-width: 720px) {
-      .circle { width: 100%; }
-      .key-node { width: 72px; height: 72px; border-radius: 14px; }
-      header { flex-direction: column; align-items: flex-start; }
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="app">
-    <header>
-      <div>
-        <h1>五度圏ベースのコード早見</h1>
-        <p>キーを選ぶと、ダイアトニックコードと機能、ハーモニックマイナーの主要コードを即表示。</p>
+  <div class="page">
+    <header class="hero">
+      <div class="hero__text">
+        <p class="eyebrow">Circle of Fifths Reference</p>
+        <h1>五度圏コード早見</h1>
+        <p class="lede">外周メジャー / 内周マイナーをクリックして、平行調のトライアドと機能（T/D/S）を確認できます。</p>
       </div>
-      <button class="clean" id="randomKey">ランダムで決める</button>
+      <div class="hero__status">
+        <span class="pill" id="modeTag">Major</span>
+        <span class="pill pill--accent" id="keyTag">C</span>
+      </div>
     </header>
 
-    <div class="circle-wrap">
-      <div class="circle" id="circle">
-        <div class="ring"></div>
-      </div>
-    </div>
-
-    <div class="cards">
-      <div class="card">
-        <h3>選択中 <span class="tag" id="activeKeyTag"></span></h3>
-        <div class="controls">
-          <div class="pill">
-            <span class="muted">キー</span>
-            <select id="keySelect"></select>
+    <main class="layout">
+      <section class="panel">
+        <div class="panel__head">
+          <div>
+            <p class="eyebrow">SVG Circle of Fifths</p>
+            <h2>五度圏</h2>
           </div>
-          <div class="pill">
-            <span class="muted">平行調</span>
-            <span class="inline-k" id="relativeMinor"></span>
-          </div>
-          <div class="pill">
-            <span class="muted">トニック</span>
-            <span class="inline-k" id="tonic"></span>
-          </div>
+          <p class="hint">クリックはトグルなし / 同じキーは無視</p>
         </div>
-        <div style="margin-top:12px; color: var(--muted); line-height: 1.6;">
-          右回りでドミナント方向（緊張）、左回りでサブドミナント方向（緩和）。近接調から借用すると自然に色付けできます。
+        <div class="circle-shell">
+          <svg id="circleSvg" viewBox="0 0 640 640" role="img" aria-label="五度圏（外周メジャー・内周マイナー）"></svg>
         </div>
-      </div>
+        <div class="legend">
+          <div class="legend__item">
+            <span class="dot dot--major"></span><span>メジャー（深めのブルー）</span>
+          </div>
+          <div class="legend__item">
+            <span class="dot dot--minor"></span><span>マイナー（深めのピンク/レッド）</span>
+          </div>
+          <div class="legend__item muted">未選択はグレー系、ハイライトは控えめなコントラスト</div>
+        </div>
+      </section>
 
-      <div class="card">
-        <h3>メジャー・ダイアトニック（T/S/D）</h3>
-        <div class="info-grid" id="majorList"></div>
-      </div>
-
-      <div class="card">
-        <h3>ハーモニックマイナー（i 系）</h3>
-        <div class="info-grid" id="minorList"></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>定番進行（現在のキーで展開）</h3>
-      <div class="progressions" id="progressions"></div>
-    </div>
+      <section class="panel">
+        <div class="panel__head">
+          <div>
+            <p class="eyebrow">Scale Degrees</p>
+            <h2>度数表</h2>
+          </div>
+          <p class="hint">2行×7列（上: Ⅰ〜Ⅶ＋機能 / 下: コード名）</p>
+        </div>
+        <div class="degree-table">
+          <div class="degree-row degree-row--labels" id="degreeLabels"></div>
+          <div class="degree-row degree-row--chords" id="degreeChords"></div>
+        </div>
+        <p class="note">マイナーは自然マイナー基準、Vのみメジャー化。Ⅶは省略のためコード欄を「—」で表示します。</p>
+      </section>
+    </main>
   </div>
 
-  <script>
-    const FIFTHS = ["C","G","D","A","E","B","F#","Db","Ab","Eb","Bb","F"];
-    const MAJOR_SCALES = {
-      "C": ["C","D","E","F","G","A","B"],
-      "G": ["G","A","B","C","D","E","F#"],
-      "D": ["D","E","F#","G","A","B","C#"],
-      "A": ["A","B","C#","D","E","F#","G#"],
-      "E": ["E","F#","G#","A","B","C#","D#"],
-      "B": ["B","C#","D#","E","F#","G#","A#"],
-      "F#": ["F#","G#","A#","B","C#","D#","E#"],
-      "Db": ["Db","Eb","F","Gb","Ab","Bb","C"],
-      "Ab": ["Ab","Bb","C","Db","Eb","F","G"],
-      "Eb": ["Eb","F","G","Ab","Bb","C","D"],
-      "Bb": ["Bb","C","D","Eb","F","G","A"],
-      "F": ["F","G","A","Bb","C","D","E"]
-    };
-    const NOTE_TO_INDEX = {
-      "C":0,"B#":0, "C#":1,"Db":1,"D":2,"D#":3,"Eb":3,"E":4,"Fb":4,
-      "E#":5,"F":5,"F#":6,"Gb":6,"G":7,"G#":8,"Ab":8,"A":9,"A#":10,"Bb":10,"B":11,"Cb":11
-    };
-    const SHARP_NOTES = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
-
-    const FUNCTION_LABELS = {
-      "I": "トニック",
-      "ii": "サブドミナント的",
-      "iii": "トニック的",
-      "IV": "サブドミナント",
-      "V": "ドミナント",
-      "vi": "トニック代理",
-      "vii°": "導音・ドミナント",
-      "i": "トニック",
-      "ii°": "サブドミナント的",
-      "III+": "トニック代理",
-      "iv": "サブドミナント",
-      "V (hm)": "ドミナント",
-      "bVI": "トニック代理",
-      "vii° (hm)": "導音"
-    };
-
-    const PROGRESSIONS = [
-      { name: "ii–V–I", steps: ["ii","V","I"], note: "スタンダードな終止" },
-      { name: "I–VI–II–V", steps: ["I","vi","ii","V"], note: "循環コード" },
-      { name: "I–V–vi–IV", steps: ["I","V","vi","IV"], note: "ポップス定番" },
-      { name: "IV–V–iii–vi", steps: ["IV","V","iii","vi"], note: "王道逆循環" },
-      { name: "iiø–V–i (hm)", steps: ["ii°","V","i"], note: "マイナー解決" },
-      { name: "bVI–bVII–i", steps: ["bVI","bVII","i"], note: "ナチュラル系カラー" }
-    ];
-
-    const state = { key: "C" };
-
-    function raiseSemitone(note) {
-      const idx = NOTE_TO_INDEX[note];
-      if (idx === undefined) return note;
-      return SHARP_NOTES[(idx + 1) % 12];
-    }
-
-    function getRelativeMinor(scale) {
-      return scale[5];
-    }
-
-    function buildMajorChords(scale) {
-      return [
-        { degree: "I", chord: `${scale[0]}maj7`, role: FUNCTION_LABELS["I"] },
-        { degree: "ii", chord: `${scale[1]}m7`, role: FUNCTION_LABELS["ii"] },
-        { degree: "iii", chord: `${scale[2]}m7`, role: FUNCTION_LABELS["iii"] },
-        { degree: "IV", chord: `${scale[3]}maj7`, role: FUNCTION_LABELS["IV"] },
-        { degree: "V", chord: `${scale[4]}7`, role: FUNCTION_LABELS["V"] },
-        { degree: "vi", chord: `${scale[5]}m7`, role: FUNCTION_LABELS["vi"] },
-        { degree: "vii°", chord: `${scale[6]}m7b5`, role: FUNCTION_LABELS["vii°"] }
-      ];
-    }
-
-    function buildHarmonicMinor(scale) {
-      const naturalMinor = [scale[5], scale[6], scale[0], scale[1], scale[2], scale[3], scale[4]];
-      const harmonic = [...naturalMinor];
-      harmonic[6] = raiseSemitone(naturalMinor[6]);
-      return harmonic;
-    }
-
-    function buildHarmonicMinorChords(hm) {
-      return [
-        { degree: "i", chord: `${hm[0]}m(maj7)`, role: FUNCTION_LABELS["i"] },
-        { degree: "ii°", chord: `${hm[1]}m7b5`, role: FUNCTION_LABELS["ii°"] },
-        { degree: "III+", chord: `${hm[2]}maj7#5`, role: FUNCTION_LABELS["III+"] },
-        { degree: "iv", chord: `${hm[3]}m7`, role: FUNCTION_LABELS["iv"] },
-        { degree: "V (hm)", chord: `${hm[4]}7`, role: FUNCTION_LABELS["V (hm)"] },
-        { degree: "bVI", chord: `${hm[5]}maj7`, role: FUNCTION_LABELS["bVI"] },
-        { degree: "vii° (hm)", chord: `${hm[6]}dim7`, role: FUNCTION_LABELS["vii° (hm)"] }
-      ];
-    }
-
-    function renderCircle() {
-      const circle = document.getElementById("circle");
-      circle.querySelectorAll(".key-node").forEach(n => n.remove());
-      const radius = 44;
-      FIFTHS.forEach((k, i) => {
-        const node = document.createElement("button");
-        node.className = "key-node" + (state.key === k ? " active" : "");
-        const angle = (i / FIFTHS.length) * Math.PI * 2 - Math.PI / 2;
-        const x = 50 + Math.cos(angle) * radius;
-        const y = 50 + Math.sin(angle) * radius;
-        node.style.left = `${x}%`;
-        node.style.top = `${y}%`;
-        node.style.transform = "translate(-50%, -50%)";
-        node.innerHTML = `<div class="label">${k}</div><div class="sub">V→ ${nextOf(k)}</div>`;
-        node.addEventListener("click", () => { state.key = k; renderAll(); });
-        circle.appendChild(node);
-      });
-    }
-
-    function nextOf(k) {
-      const idx = FIFTHS.indexOf(k);
-      return FIFTHS[(idx + 1) % FIFTHS.length];
-    }
-
-    function renderSelectors() {
-      const sel = document.getElementById("keySelect");
-      sel.innerHTML = "";
-      FIFTHS.forEach(k => {
-        const opt = document.createElement("option");
-        opt.value = k; opt.textContent = k;
-        if (state.key === k) opt.selected = true;
-        sel.appendChild(opt);
-      });
-      sel.onchange = e => { state.key = e.target.value; renderAll(); };
-      document.getElementById("randomKey").onclick = () => {
-        const k = FIFTHS[Math.floor(Math.random() * FIFTHS.length)];
-        state.key = k; renderAll();
-      };
-    }
-
-    function renderChordList(containerId, list) {
-      const wrap = document.getElementById(containerId);
-      wrap.innerHTML = "";
-      list.forEach(row => {
-        const div = document.createElement("div");
-        div.className = "row";
-        div.innerHTML = `
-          <span class="degree">${row.degree}</span>
-          <span class="chord">${row.chord}</span>
-          <span class="role">${row.role}</span>
-        `;
-        wrap.appendChild(div);
-      });
-    }
-
-    function renderProgressions(major, hm) {
-      const map = new Map(major.concat(hm).map(x => [x.degree, x.chord]));
-      const rel = getRelativeMinor(MAJOR_SCALES[state.key]);
-      const container = document.getElementById("progressions");
-      container.innerHTML = "";
-      PROGRESSIONS.forEach(p => {
-        const chords = p.steps.map(s => map.get(s) || s);
-        const div = document.createElement("div");
-        div.className = "progression";
-        div.innerHTML = `
-          <div class="prog-title">${p.name}</div>
-          <div class="prog-steps">${chords.join(" → ")}</div>
-          <div class="muted">${p.note}</div>
-        `;
-        container.appendChild(div);
-      });
-      document.getElementById("relativeMinor").textContent = `${rel}m`;
-    }
-
-    function renderMeta(scale) {
-      document.getElementById("tonic").textContent = scale[0];
-      document.getElementById("activeKeyTag").textContent = state.key;
-    }
-
-    function renderAll() {
-      const scale = MAJOR_SCALES[state.key] || MAJOR_SCALES["C"];
-      renderCircle();
-      renderSelectors();
-      const major = buildMajorChords(scale);
-      const hmScale = buildHarmonicMinor(scale);
-      const hm = buildHarmonicMinorChords(hmScale);
-      renderChordList("majorList", major);
-      renderChordList("minorList", hm);
-      renderProgressions(major, hm);
-      renderMeta(scale);
-    }
-
-    renderAll();
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
