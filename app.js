@@ -178,7 +178,7 @@ function placeKey(svg, label, mode, idx, radius, center) {
   const node = svgEl("circle", {
     cx: x,
     cy: y,
-    r: mode === "major" ? 28 : 24,
+    r: mode === "major" ? 42 : 36,
     class: "key-circle"
   });
 
@@ -188,7 +188,30 @@ function placeKey(svg, label, mode, idx, radius, center) {
     class: `key-label key-label--${mode}`,
     "aria-label": `${mode} ${label}`
   });
-  text.textContent = label;
+  
+  // ラベルを解析して、♭や♯を小さく表示
+  const labelParts = label.match(/([A-G])([#b]?)(m?)/);
+  if (labelParts) {
+    const [, letter, accidental, minor] = labelParts;
+    text.textContent = letter;
+    
+    if (accidental) {
+      const accidentalSymbol = accidental === '#' ? '♯' : '♭';
+      const tspan = svgEl("tspan", {
+        class: "key-label-accidental"
+      });
+      tspan.textContent = accidentalSymbol;
+      text.appendChild(tspan);
+    }
+    
+    if (minor) {
+      const tspan = svgEl("tspan");
+      tspan.textContent = minor;
+      text.appendChild(tspan);
+    }
+  } else {
+    text.textContent = label;
+  }
 
   const select = () => {
     if (isActive) return;

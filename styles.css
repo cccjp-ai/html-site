@@ -125,6 +125,11 @@ body {
   font-size: 0.92rem;
 }
 
+.circle-content {
+  transform: scale(0.7);
+  transform-origin: top center;
+}
+
 .circle-shell {
   background: var(--panel-strong);
   border: 1px solid var(--border);
@@ -236,7 +241,7 @@ body {
 .wheel-ring {
   fill: none;
   stroke: var(--border);
-  stroke-width: 1;
+  stroke-width: 2;
   stroke-dasharray: 2 6;
 }
 
@@ -245,16 +250,20 @@ body {
 .key-circle {
   fill: rgba(255, 255, 255, 0.04);
   stroke: var(--border);
-  stroke-width: 1;
+  stroke-width: 2;
   transition: transform 180ms ease, fill 180ms ease, stroke 180ms ease;
 }
 
 .key-label {
-  font-size: 20px;
+  font-size: 40px;
   font-weight: 600;
   text-anchor: middle;
   dominant-baseline: middle;
   pointer-events: none;
+}
+
+.key-label-accidental {
+  font-size: 20px;
 }
 
 .key-label--major { fill: var(--major); }
@@ -263,7 +272,7 @@ body {
 .key-hit {
   fill: transparent;
   stroke: transparent;
-  stroke-width: 28;
+  stroke-width: 56;
 }
 
 .key-group:hover .key-circle {
