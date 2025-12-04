@@ -6,10 +6,11 @@
   --text: #e8ecf4;
   --muted: #97a2b3;
   --muted-strong: #c3cad6;
-  --major: #2d5aff;
-  --major-soft: rgba(45, 90, 255, 0.12);
-  --minor: #c23b6f;
-  --minor-soft: rgba(194, 59, 111, 0.14);
+  /* メジャー／マイナーの色味を反転（色自体は既存のものを使用） */
+  --major: #c23b6f;
+  --major-soft: rgba(194, 59, 111, 0.14);
+  --minor: #2d5aff;
+  --minor-soft: rgba(45, 90, 255, 0.12);
   --gray-soft: rgba(255, 255, 255, 0.04);
 }
 
@@ -67,29 +68,36 @@ body {
   background: var(--gray-soft);
   color: var(--text);
   font-weight: 600;
+  font-size: 30px;
   letter-spacing: 0.01em;
+}
+
+/* キー表示用の ♭ / ♯ を上付き・25px にする */
+.key-pill-accidental {
+  font-size: 25px;
+  baseline-shift: super;
 }
 
 .pill--accent {
   background: var(--major-soft);
-  border-color: rgba(45, 90, 255, 0.4);
+  border-color: rgba(194, 59, 111, 0.5);
 }
 
 .pill--major {
   background: var(--major-soft);
-  border-color: rgba(45, 90, 255, 0.4);
+  border-color: rgba(194, 59, 111, 0.5);
 }
 
 .pill--minor {
   background: var(--minor-soft);
-  border-color: rgba(194, 59, 111, 0.5);
+  border-color: rgba(45, 90, 255, 0.4);
 }
 
 .eyebrow {
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-size: 0.8rem;
+  font-size: 25px;
   color: var(--muted);
 }
 
@@ -213,13 +221,13 @@ body {
 }
 
 .degree-cell.is-major {
-  border-color: rgba(45, 90, 255, 0.35);
+  border-color: rgba(194, 59, 111, 0.38);
   background: var(--major-soft);
   color: var(--text);
 }
 
 .degree-cell.is-minor {
-  border-color: rgba(194, 59, 111, 0.38);
+  border-color: rgba(45, 90, 255, 0.35);
   background: var(--minor-soft);
 }
 
@@ -263,7 +271,13 @@ body {
 }
 
 .key-label-accidental {
-  font-size: 20px;
+  font-size: 25px;
+  baseline-shift: super;
+}
+
+/* 五度圏ラベルの m だけ 30px にする */
+.key-label-minor-m {
+  font-size: 30px;
 }
 
 .key-label--major { fill: var(--major); }
@@ -282,12 +296,12 @@ body {
 
 .key-group.active-major .key-circle {
   fill: var(--major-soft);
-  stroke: rgba(45, 90, 255, 0.7);
+  stroke: rgba(194, 59, 111, 0.7);
 }
 
 .key-group.active-minor .key-circle {
   fill: var(--minor-soft);
-  stroke: rgba(194, 59, 111, 0.7);
+  stroke: rgba(45, 90, 255, 0.7);
 }
 
 .key-group.inactive .key-label {

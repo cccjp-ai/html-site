@@ -205,7 +205,9 @@ function placeKey(svg, label, mode, idx, radius, center) {
     }
     
     if (minor) {
-      const tspan = svgEl("tspan");
+      const tspan = svgEl("tspan", {
+        class: "key-label-minor-m"
+      });
       tspan.textContent = minor;
       text.appendChild(tspan);
     }
@@ -238,7 +240,26 @@ function updateTags() {
   const pair = getCurrentPair();
   const keyTag = document.getElementById("keyTag");
   const modeTag = document.getElementById("modeTag");
-  keyTag.textContent = state.mode === "major" ? pair.major : pair.minor;
+  // 表示上のキー名（マイナー時は末尾の "m" を削る）
+  const displayKey =
+    state.mode === "major"
+      ? pair.major
+      : (pair.minor || "").replace(/m$/, "");
+
+  // ♭ / ♯ を含む場合は、記号のみ上付き表記で表示
+  const keyMatch = displayKey.match(/^([A-G])([b#])?$/);
+  if (keyMatch) {
+    const [, letter, accidental] = keyMatch;
+    if (accidental) {
+      const accidentalSymbol = accidental === "#" ? "♯" : "♭";
+      keyTag.innerHTML = `${letter}<span class="key-pill-accidental">${accidentalSymbol}</span>`;
+    } else {
+      keyTag.textContent = letter;
+    }
+  } else {
+    keyTag.textContent = displayKey;
+  }
+
   modeTag.textContent = state.mode === "major" ? "Major" : "Minor";
   keyTag.className = state.mode === "major" ? "pill pill--major" : "pill pill--minor";
   modeTag.className = "pill";
